@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748B"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="978" height="618" rx="16" fill="#F7F9FB" stroke="#E2E8EF"/>
+  <text x="28" y="36" font-size="17" font-weight="700" fill="#1F2933">dal.py — the data-access layer</text>
+  <text x="28" y="57" font-size="12" fill="#64748B">The only file that talks to MongoDB. Each method runs one driver call, then maps the raw document into a pydantic model (<tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">from_doc</tspan>).</text>
+
+  <!-- ToDoDAL panel -->
+  <rect x="28" y="76" width="400" height="524" rx="12" fill="#FFFFFF" stroke="#C7D1DA"/>
+  <text x="46" y="102" font-size="13" font-weight="700" fill="#1F2933">class ToDoDAL(todo_collection)</text>
+
+  <!-- READ group -->
+  <text x="46" y="126" font-size="10.5" font-weight="700" fill="#0B5A52" letter-spacing="0.06em">READ · 2</text>
+  <g font-family="ui-monospace, Menlo, monospace">
+    <rect x="46" y="134" width="366" height="46" rx="7" fill="#EEF6F4" stroke="#BFE0DA"/>
+    <text x="60" y="153" font-size="11.5" fill="#1F2933">list_todo_lists()</text>
+    <text x="60" y="170" font-size="10" fill="#64748B">find(...) + $size projection · async generator</text>
+
+    <rect x="46" y="186" width="366" height="46" rx="7" fill="#EEF6F4" stroke="#BFE0DA"/>
+    <text x="60" y="205" font-size="11.5" fill="#1F2933">get_todo_list(id)</text>
+    <text x="60" y="222" font-size="10" fill="#64748B">find_one({_id}) · ⚠ no None guard (line 71)</text>
+  </g>
+
+  <!-- WRITE group -->
+  <text x="46" y="256" font-size="10.5" font-weight="700" fill="#8A6207" letter-spacing="0.06em">WRITE · 5</text>
+  <g font-family="ui-monospace, Menlo, monospace">
+    <rect x="46" y="264" width="366" height="40" rx="7" fill="#FBF3E0" stroke="#EAD9AF"/>
+    <text x="60" y="281" font-size="11.5" fill="#1F2933">create_todo_list(name)</text>
+    <text x="60" y="297" font-size="10" fill="#64748B">insert_one · returns new id (str)</text>
+
+    <rect x="46" y="310" width="366" height="40" rx="7" fill="#FBF3E0" stroke="#EAD9AF"/>
+    <text x="60" y="327" font-size="11.5" fill="#1F2933">delete_todo_list(id)</text>
+    <text x="60" y="343" font-size="10" fill="#64748B">delete_one · returns bool</text>
+
+    <rect x="46" y="356" width="366" height="40" rx="7" fill="#FBF3E0" stroke="#EAD9AF"/>
+    <text x="60" y="373" font-size="11.5" fill="#1F2933">create_item(id, label)</text>
+    <text x="60" y="389" font-size="10" fill="#64748B">find_one_and_update · $push · id = uuid4().hex</text>
+
+    <rect x="46" y="402" width="366" height="40" rx="7" fill="#FBF3E0" stroke="#EAD9AF"/>
+    <text x="60" y="419" font-size="11.5" fill="#1F2933">set_checked_state(doc_id, item_id, ...)</text>
+    <text x="60" y="435" font-size="10" fill="#64748B">$set items.$.checked · filtered by items.id</text>
+
+    <rect x="46" y="448" width="366" height="40" rx="7" fill="#FBF3E0" stroke="#EAD9AF"/>
+    <text x="60" y="465" font-size="11.5" fill="#1F2933">delete_item(doc_id, item_id)</text>
+    <text x="60" y="481" font-size="10" fill="#64748B">$pull items by id</text>
+  </g>
+
+  <text x="46" y="512" font-size="10.5" fill="#94A3B8">Every method accepts <tspan font-family="ui-monospace, Menlo, monospace">session=None</tspan> — threaded into</text>
+  <text x="46" y="527" font-size="10.5" fill="#94A3B8">the driver call for transactions, though no caller sets it yet.</text>
+
+  <!-- collection at bottom of left panel -->
+  <rect x="46" y="540" width="366" height="46" rx="7" fill="#F0F5FA" stroke="#C7D1DA"/>
+  <text x="60" y="559" font-size="10.5" font-weight="700" fill="#334155" font-family="ui-monospace, Menlo, monospace">MongoDB collection: todo_lists</text>
+  <text x="60" y="575" font-size="9.5" fill="#64748B" font-family="ui-monospace, Menlo, monospace">{ _id, name, items: [ { id, label, checked } ] }</text>
+
+  <!-- arrow methods -> models -->
+  <line x1="430" y1="230" x2="512" y2="230" stroke="#64748B" stroke-width="1.6" marker-end="url(#a)"/>
+  <text x="471" y="222" font-size="9.5" fill="#64748B" text-anchor="middle">from_doc</text>
+
+  <!-- Models panel -->
+  <rect x="516" y="76" width="436" height="524" rx="12" fill="#FBFCFD" stroke="#C7D1DA"/>
+  <text x="534" y="102" font-size="13" font-weight="700" fill="#1F2933">pydantic models  ·  returned to server.py</text>
+
+  <!-- ListSummary -->
+  <rect x="534" y="118" width="400" height="94" rx="9" fill="#FFFFFF" stroke="#BFE0DA"/>
+  <text x="548" y="140" font-size="12.5" font-weight="700" fill="#0B5A52">ListSummary</text>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="10.5">
+    <text x="548" y="160" fill="#64748B">doc["_id"]</text><text x="690" y="160" fill="#94A3B8">→</text><text x="712" y="160" fill="#1F2933">id: str</text>
+    <text x="548" y="177" fill="#64748B">doc["name"]</text><text x="690" y="177" fill="#94A3B8">→</text><text x="712" y="177" fill="#1F2933">name: str</text>
+    <text x="548" y="194" fill="#64748B">$size projection</text><text x="690" y="194" fill="#94A3B8">→</text><text x="712" y="194" fill="#1F2933">item_count: int</text>
+  </g>
+
+  <!-- ToDoListItem -->
+  <rect x="534" y="222" width="400" height="94" rx="9" fill="#FFFFFF" stroke="#BFE0DA"/>
+  <text x="548" y="244" font-size="12.5" font-weight="700" fill="#0B5A52">ToDoListItem</text>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="10.5">
+    <text x="548" y="264" fill="#64748B">item["id"]</text><text x="690" y="264" fill="#94A3B8">→</text><text x="712" y="264" fill="#1F2933">id: str  (uuid hex)</text>
+    <text x="548" y="281" fill="#64748B">item["label"]</text><text x="690" y="281" fill="#94A3B8">→</text><text x="712" y="281" fill="#1F2933">label: str</text>
+    <text x="548" y="298" fill="#64748B">item["checked"]</text><text x="690" y="298" fill="#94A3B8">→</text><text x="712" y="298" fill="#1F2933">checked: bool</text>
+  </g>
+
+  <!-- ToDoList -->
+  <rect x="534" y="326" width="400" height="94" rx="9" fill="#FFFFFF" stroke="#BFE0DA"/>
+  <text x="548" y="348" font-size="12.5" font-weight="700" fill="#0B5A52">ToDoList</text>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="10.5">
+    <text x="548" y="368" fill="#64748B">doc["_id"]</text><text x="690" y="368" fill="#94A3B8">→</text><text x="712" y="368" fill="#1F2933">id: str</text>
+    <text x="548" y="385" fill="#64748B">doc["name"]</text><text x="690" y="385" fill="#94A3B8">→</text><text x="712" y="385" fill="#1F2933">name: str</text>
+    <text x="548" y="402" fill="#64748B">doc["items"]</text><text x="690" y="402" fill="#94A3B8">→</text><text x="712" y="402" fill="#1F2933">items: list[ToDoListItem]</text>
+  </g>
+
+  <!-- the key insight -->
+  <rect x="534" y="436" width="400" height="150" rx="9" fill="#EEF6F4" stroke="#0F7B70"/>
+  <text x="548" y="458" font-size="12" font-weight="700" fill="#0B5A52">The translation this file exists for</text>
+  <text x="548" y="480" font-size="11" fill="#334155" font-family="ui-monospace, Menlo, monospace">  BSON document  →  typed model</text>
+  <text x="548" y="500" font-size="11" fill="#334155" font-family="ui-monospace, Menlo, monospace">  ObjectId       →  str</text>
+  <text x="548" y="526" font-size="10.5" fill="#64748B">Mongo's ObjectId never leaves dal.py; server.py</text>
+  <text x="548" y="542" font-size="10.5" fill="#64748B">and the JSON API only ever see plain strings.</text>
+  <text x="548" y="566" font-size="10.5" fill="#64748B">Item mutations return the whole ToDoList (AFTER),</text>
+  <text x="548" y="582" font-size="10.5" fill="#64748B">so one round trip both writes and reads back.</text>
+</svg>

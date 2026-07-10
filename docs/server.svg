@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 600" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748B"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="978" height="598" rx="16" fill="#F7F9FB" stroke="#E2E8EF"/>
+  <text x="28" y="36" font-size="17" font-weight="700" fill="#1F2933">server.py — FastAPI app, lifespan &amp; routes</text>
+  <text x="28" y="57" font-size="12" fill="#64748B">Reads env <tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">MONGODB_URI</tspan> and <tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">DEBUG</tspan>. Routes never touch Mongo — they delegate to <tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">app.todo_dal</tspan>.</text>
+
+  <!-- Lifespan panel -->
+  <rect x="28" y="76" width="286" height="496" rx="12" fill="#EEF6F4" stroke="#0F7B70"/>
+  <text x="46" y="102" font-size="13" font-weight="700" fill="#0B5A52">lifespan()  ·  startup / shutdown</text>
+
+  <g font-family="ui-monospace, Menlo, monospace" font-size="11">
+    <rect x="46" y="118" width="250" height="34" rx="7" fill="#FFFFFF" stroke="#BFE0DA"/>
+    <text x="58" y="139" fill="#334155">▸ startup</text>
+
+    <rect x="46" y="160" width="250" height="46" rx="7" fill="#FFFFFF" stroke="#BFE0DA"/>
+    <text x="58" y="179" fill="#1F2933">client = AsyncIOMotorClient(</text>
+    <text x="58" y="195" fill="#64748B">          MONGODB_URI)</text>
+
+    <rect x="46" y="214" width="250" height="34" rx="7" fill="#FFFFFF" stroke="#BFE0DA"/>
+    <text x="58" y="235" fill="#1F2933">await db.command("ping")</text>
+
+    <rect x="46" y="256" width="250" height="46" rx="7" fill="#FFFFFF" stroke="#BFE0DA"/>
+    <text x="58" y="275" fill="#1F2933">app.todo_dal = ToDoDAL(</text>
+    <text x="58" y="291" fill="#64748B">          todo_lists)</text>
+  </g>
+
+  <line x1="60" y1="322" x2="282" y2="322" stroke="#0F7B70" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="171" y="338" font-size="11" fill="#0B5A52" text-anchor="middle" font-style="italic">— yield: app serves requests —</text>
+  <line x1="60" y1="348" x2="282" y2="348" stroke="#0F7B70" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <g font-family="ui-monospace, Menlo, monospace" font-size="11">
+    <rect x="46" y="364" width="250" height="34" rx="7" fill="#FFFFFF" stroke="#BFE0DA"/>
+    <text x="58" y="385" fill="#334155">▸ shutdown</text>
+    <rect x="46" y="406" width="250" height="34" rx="7" fill="#FFFFFF" stroke="#BFE0DA"/>
+    <text x="58" y="427" fill="#1F2933">client.close()</text>
+  </g>
+
+  <text x="46" y="470" font-size="11" fill="#64748B">app = FastAPI(</text>
+  <text x="46" y="486" font-size="11" fill="#64748B" font-family="ui-monospace, Menlo, monospace">  lifespan=lifespan,</text>
+  <text x="46" y="502" font-size="11" fill="#64748B" font-family="ui-monospace, Menlo, monospace">  debug=DEBUG)</text>
+  <text x="46" y="534" font-size="10.5" fill="#94A3B8">The DAL is built once at startup and</text>
+  <text x="46" y="549" font-size="10.5" fill="#94A3B8">reused by every request via app.todo_dal.</text>
+
+  <!-- Routes panel -->
+  <rect x="336" y="76" width="616" height="496" rx="12" fill="#FFFFFF" stroke="#C7D1DA"/>
+  <text x="354" y="102" font-size="13" font-weight="700" fill="#1F2933">Routes  →  ToDoDAL method</text>
+
+  <!-- verb color key: GET teal, POST amber, DELETE brick, PATCH blue -->
+  <g font-family="ui-monospace, Menlo, monospace">
+    <!-- row 1 -->
+    <rect x="354" y="116" width="56" height="20" rx="5" fill="#E6F4F1"/><text x="382" y="130" font-size="10.5" fill="#0B5A52" font-weight="700" text-anchor="middle">GET</text>
+    <text x="420" y="130" font-size="11.5" fill="#1F2933">/api/lists</text>
+    <text x="420" y="147" font-size="10.5" fill="#64748B">→ list_todo_lists()   ·   resp list[ListSummary]</text>
+
+    <!-- row 2 -->
+    <rect x="354" y="160" width="56" height="20" rx="5" fill="#FBF3E0"/><text x="382" y="174" font-size="10.5" fill="#8A6207" font-weight="700" text-anchor="middle">POST</text>
+    <text x="420" y="174" font-size="11.5" fill="#1F2933">/api/lists</text>
+    <text x="420" y="191" font-size="10.5" fill="#64748B">→ create_todo_list()   ·   NewList → NewListResponse  (201)</text>
+
+    <!-- row 3 -->
+    <rect x="354" y="204" width="56" height="20" rx="5" fill="#E6F4F1"/><text x="382" y="218" font-size="10.5" fill="#0B5A52" font-weight="700" text-anchor="middle">GET</text>
+    <text x="420" y="218" font-size="11.5" fill="#1F2933">/api/lists/{list_id}</text>
+    <text x="420" y="235" font-size="10.5" fill="#64748B">→ get_todo_list()   ·   resp ToDoList</text>
+
+    <!-- row 4 -->
+    <rect x="354" y="248" width="56" height="20" rx="5" fill="#F7E4E0"/><text x="382" y="262" font-size="9.5" fill="#8A2E20" font-weight="700" text-anchor="middle">DELETE</text>
+    <text x="420" y="262" font-size="11.5" fill="#1F2933">/api/lists/{list_id}</text>
+    <text x="420" y="279" font-size="10.5" fill="#64748B">→ delete_todo_list()   ·   resp bool</text>
+
+    <!-- row 5 -->
+    <rect x="354" y="292" width="56" height="20" rx="5" fill="#FBF3E0"/><text x="382" y="306" font-size="10.5" fill="#8A6207" font-weight="700" text-anchor="middle">POST</text>
+    <text x="420" y="306" font-size="11.5" fill="#1F2933">/api/lists/{list_id}/items/</text>
+    <text x="420" y="323" font-size="10.5" fill="#64748B">→ create_item()   ·   NewItem → ToDoList  (201)</text>
+
+    <!-- row 6 -->
+    <rect x="354" y="336" width="56" height="20" rx="5" fill="#F7E4E0"/><text x="382" y="350" font-size="9.5" fill="#8A2E20" font-weight="700" text-anchor="middle">DELETE</text>
+    <text x="420" y="350" font-size="11.5" fill="#1F2933">/api/lists/{list_id}/items/{item_id}</text>
+    <text x="420" y="367" font-size="10.5" fill="#64748B">→ delete_item()   ·   resp ToDoList</text>
+
+    <!-- row 7 -->
+    <rect x="354" y="380" width="56" height="20" rx="5" fill="#E9EDFB"/><text x="382" y="394" font-size="10" fill="#2A3F9E" font-weight="700" text-anchor="middle">PATCH</text>
+    <text x="420" y="394" font-size="11.5" fill="#1F2933">/api/lists/{list_id}/checked_state</text>
+    <text x="420" y="411" font-size="10.5" fill="#64748B">→ set_checked_state()   ·   ToDoItemUpdate → ToDoList</text>
+
+    <!-- row 8 -->
+    <rect x="354" y="424" width="56" height="20" rx="5" fill="#E6F4F1"/><text x="382" y="438" font-size="10.5" fill="#0B5A52" font-weight="700" text-anchor="middle">GET</text>
+    <text x="420" y="438" font-size="11.5" fill="#1F2933">/api/dummy</text>
+    <text x="420" y="455" font-size="10.5" fill="#94A3B8">→ (no DAL)   ·   resp DummyResponse  — placeholder</text>
+  </g>
+
+  <line x1="354" y1="470" x2="934" y2="470" stroke="#E2E8EF"/>
+  <text x="354" y="492" font-size="11" fill="#64748B">Request bodies (<tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">NewList</tspan>, <tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">NewItem</tspan>, <tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">ToDoItemUpdate</tspan>) are pydantic models —</text>
+  <text x="354" y="509" font-size="11" fill="#64748B">FastAPI validates them in, and validates each <tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">-&gt;</tspan> return type out.</text>
+
+  <rect x="354" y="524" width="580" height="34" rx="8" fill="#F0F5FA" stroke="#C7D1DA"/>
+  <text x="366" y="546" font-size="11" fill="#334155">main(): <tspan font-family="ui-monospace, Menlo, monospace">uvicorn.run("server:app", host="0.0.0.0", port=3001, reload=DEBUG)</tspan></text>
+</svg>

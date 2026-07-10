@@ -178,3 +178,21 @@ cd backend
 source venv/bin/activate
 MONGODB_URI=... DEBUG=true python src/server.py
 ```
+
+## Backend Internals
+
+The backend is two files with a deliberate split: `server.py` owns HTTP, `dal.py` owns MongoDB, and neither reaches into the other's job.
+
+### `server.py` — app, lifespan, routes
+
+![server.py structure](docs/server.svg)
+
+On startup, the `lifespan` handler opens one MongoDB client, pings it, and builds a single `ToDoDAL` onto `app.todo_dal`; on shutdown it closes the client. Every route is thin — it validates its pydantic request/response models and delegates the actual work to `app.todo_dal`. The routes themselves never import motor or touch the database.
+
+### `dal.py` — the data-access layer
+
+![dal.py structure](docs/dal.svg)
+
+`ToDoDAL` is the only place that talks to MongoDB. Its seven methods (2 reads, 5 writes) each run one driver call and then map the raw document into a pydantic model via a static `from_doc`. The point of the layer is the translation: a BSON document becomes a typed model and `ObjectId` becomes `str`, so Mongo-specific types never leak out to `server.py` or the JSON API.
+
+> **Known rough edge:** `get_todo_list` (dal.py:71) maps its result without a `None` check, unlike every write method. A GET for an unknown or deleted list id makes `from_doc(None)` raise, surfacing as a 500 rather than a 404.
