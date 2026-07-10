@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 560" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrowDash" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#A03A29"/>
+    </marker>
+  </defs>
+
+  <!-- canvas -->
+  <rect x="1" y="1" width="938" height="558" rx="16" fill="#F7F9FB" stroke="#E2E8EF"/>
+
+  <text x="28" y="34" font-size="16" font-weight="700" fill="#1F2933">FARM stack — request flow &amp; ports</text>
+
+  <!-- Docker network boundary -->
+  <rect x="250" y="52" width="660" height="472" rx="14" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="2 5"/>
+  <text x="268" y="74" font-size="12" font-weight="600" fill="#64748B">Docker Compose network · todo-app</text>
+
+  <!-- Browser -->
+  <rect x="28" y="236" width="150" height="104" rx="10" fill="#EEF1F5" stroke="#C7D1DA"/>
+  <text x="103" y="278" font-size="15" font-weight="700" fill="#1F2933" text-anchor="middle">Browser</text>
+  <text x="103" y="298" font-size="11.5" fill="#64748B" text-anchor="middle">your machine</text>
+
+  <!-- nginx -->
+  <rect x="300" y="244" width="152" height="88" rx="10" fill="#EDF0FE" stroke="#3B5BDB"/>
+  <text x="376" y="280" font-size="15" font-weight="700" fill="#1E3A8A" text-anchor="middle">nginx</text>
+  <text x="376" y="300" font-size="11.5" fill="#3B5BDB" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">:80 · reverse proxy</text>
+
+  <!-- frontend -->
+  <rect x="700" y="78" width="196" height="100" rx="10" fill="#E6F4F1" stroke="#0F7B70"/>
+  <text x="798" y="112" font-size="15" font-weight="700" fill="#0B5A52" text-anchor="middle">frontend · React</text>
+  <text x="798" y="133" font-size="11.5" fill="#5C6B7A" text-anchor="middle">command: npm start</text>
+  <text x="798" y="154" font-size="11.5" fill="#0F7B70" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">:3000  (CRA default)</text>
+
+  <!-- backend -->
+  <rect x="700" y="396" width="196" height="100" rx="10" fill="#FBF3E0" stroke="#B5820A"/>
+  <text x="798" y="430" font-size="15" font-weight="700" fill="#8A6207" text-anchor="middle">backend · FastAPI</text>
+  <text x="798" y="451" font-size="11.5" fill="#5C6B7A" text-anchor="middle">uvicorn, in server.py</text>
+  <text x="798" y="472" font-size="11.5" fill="#B5820A" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">:3001  (port=3001)</text>
+
+  <!-- A: browser -> nginx (solid, main) -->
+  <line x1="178" y1="288" x2="296" y2="288" stroke="#334155" stroke-width="2.4" marker-end="url(#arrow)"/>
+  <text x="237" y="272" font-size="11.5" fill="#334155" text-anchor="middle" font-weight="600" font-family="ui-monospace, Menlo, monospace">localhost:8000</text>
+  <text x="237" y="306" font-size="10.5" fill="#64748B" text-anchor="middle">host 8000 → :80</text>
+
+  <!-- B: nginx -> frontend (solid) -->
+  <line x1="452" y1="266" x2="698" y2="150" stroke="#334155" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <text x="583" y="188" font-size="11.5" fill="#334155" text-anchor="middle" font-weight="600">everything else</text>
+  <text x="583" y="204" font-size="10.5" fill="#64748B" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">→ frontend:3000</text>
+
+  <!-- C: nginx -> backend (solid) -->
+  <line x1="452" y1="312" x2="698" y2="428" stroke="#334155" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <text x="583" y="360" font-size="11.5" fill="#334155" text-anchor="middle" font-weight="600" font-family="ui-monospace, Menlo, monospace">/api/*</text>
+  <text x="583" y="376" font-size="10.5" fill="#64748B" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">→ backend:3001</text>
+
+  <!-- D: browser -> frontend direct (dashed) -->
+  <path d="M150,236 C165,84 440,64 700,112" fill="none" stroke="#A03A29" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrowDash)"/>
+  <text x="432" y="60" font-size="11" fill="#A03A29" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">localhost:3000  (direct · ports 3000:3000)</text>
+
+  <!-- E: browser -> backend direct (dashed) -->
+  <path d="M150,340 C165,504 440,512 700,462" fill="none" stroke="#A03A29" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrowDash)"/>
+  <text x="432" y="524" font-size="11" fill="#A03A29" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">localhost:8001  (direct · ports 8001:3001)</text>
+
+  <!-- legend -->
+  <g>
+    <line x1="40" y1="392" x2="76" y2="392" stroke="#334155" stroke-width="2.4" marker-end="url(#arrow)"/>
+    <text x="84" y="396" font-size="11" fill="#334155">through nginx · reachable via <tspan font-family="ui-monospace, Menlo, monospace">expose</tspan></text>
+    <line x1="40" y1="418" x2="76" y2="418" stroke="#A03A29" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arrowDash)"/>
+    <text x="84" y="422" font-size="11" fill="#A03A29">direct side door (dev) · opened via <tspan font-family="ui-monospace, Menlo, monospace" fill="#334155">ports</tspan></text>
+  </g>
+</svg>

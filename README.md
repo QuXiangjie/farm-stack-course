@@ -23,20 +23,9 @@ farm-stack-course/
 
 Three services run together under Docker Compose. **nginx** is the front door: the browser only ever talks to it, and it forwards each request to the right service based on the URL path.
 
-The normal path — the browser goes through nginx, which fans out to the frontend and backend:
+![Architecture: request flow and ports](docs/architecture.svg)
 
-```
-                                          ┌─ /api/... ──→ backend:3001   (FastAPI)
-   your browser ──→ localhost:8000 ──→ nginx:80 ─┤
-                                          └─ everything else ──→ frontend:3000  (React)
-```
-
-Docker Compose also opens two extra "side doors" straight to a single service, skipping nginx — useful for debugging one service in isolation:
-
-```
-   your browser ──→ localhost:3000 ──────────────→ frontend:3000  (direct)
-   your browser ──→ localhost:8001 ──────────────→ backend:3001   (direct)
-```
+The **solid** arrows are the normal path — the browser hits `localhost:8000`, nginx receives it on port 80 and fans out to the frontend and backend. The **dashed** arrows are two extra "side doors" Docker Compose opens straight to a single service, skipping nginx — handy for debugging one service in isolation.
 
 ### How nginx routes (`nginx/nginx.conf`)
 
